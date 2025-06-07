@@ -1,0 +1,152 @@
+import React, { useState } from 'react';
+import { Eye, EyeOff, Instagram, Github, Mail } from 'lucide-react';
+import roadImage from '../../assets/road.jpeg';
+import logo from '../../assets/logo.svg';
+
+export function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    remember: false
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Login attempt:', formData);
+  };
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Painel Esquerdo - Formulário de Login */}
+      <div className="w-full lg:w-1/2 bg-white flex flex-col">
+        {/* Header */}
+        <div className="p-8 pb-0 flex items-center justify-between">
+          <img src={logo} alt="Logo" className="h-10" />
+          <div className="flex items-center space-x-4">
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <Instagram className="w-5 h-5 text-gray-600" />
+            </button>
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <Github className="w-5 h-5 text-gray-600" />
+            </button>
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <Mail className="w-5 h-5 text-gray-600" />
+            </button>
+          </div>
+        </div>
+
+        {/* Formulário de Login */}
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="w-full max-w-sm">
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-2">Login</h2>
+              <p className="text-sm text-gray-600">
+                Bem-vindo(a)! Por favor, insira seus dados.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Usuário */}
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                  Usuário
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  placeholder="CPF ou E-mail"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+
+              {/* Senha */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Senha
+                  </label>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Senha..."
+                    className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-30"
+              >
+                Entrar
+              </button>
+
+              <button
+                type="button"
+                className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 flex items-center justify-center space-x-2"
+              >
+                Criar conta
+              </button>
+            </form>
+
+            {/* Link para cadastro */}
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-600">
+                Esqueceu a Senha ?{' '}
+                <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                  Clique Aqui!
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Painel Direito - Imagem de Fundo */}
+      <div className="hidden lg:block lg:w-1/2 relative">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${roadImage})`
+          }}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+        </div>
+        <div className="relative h-full flex flex-col justify-end p-12 text-white">
+          <div className="mb-8">
+            <h3 className="text-4xl font-bold mb-4">Frota Escolar</h3>
+            <p className="text-lg leading-relaxed opacity-90 max-w-md">
+              Organize, monitore e otimize o transporte dos alunos de forma eficiente, segura e prática. Tenha controle total sobre rotas, veículos e horários.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+} 
