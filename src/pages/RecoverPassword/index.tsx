@@ -1,13 +1,35 @@
 import { useState } from 'react';
 import { ArrowLeft, Instagram, Github, Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const recoverSchema = z.object({
+  email: z.string().email('E-mail inválido').min(1, 'E-mail é obrigatório'),
+});
+
+type RecoverFormData = z.infer<typeof recoverSchema>;
 
 export function RecoverPasswordPage() {
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RecoverFormData>({
+    resolver: zodResolver(recoverSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: RecoverFormData) => {
+    try {
+      // TODO: Implementar chamada à API
+      console.log('Recovery request:', data);
+      navigate('/');
+    } catch (error) {
+      console.error('Recovery failed:', error);
+    }
   };
 
   return (
@@ -37,28 +59,29 @@ export function RecoverPasswordPage() {
               </p>
             </div>
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                   Email
                 </label>
                 <input
                   id="email"
-                  name="email"
                   type="email"
-                  required
+                  {...register('email')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-30"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Enviar instruções
+                {isSubmitting ? 'Enviando...' : 'Enviar instruções'}
               </button>
             </form>
 

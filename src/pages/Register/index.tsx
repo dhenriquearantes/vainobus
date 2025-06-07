@@ -1,26 +1,41 @@
 import { useState } from 'react';
 import { ArrowLeft, Instagram, Github, Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const registerSchema = z.object({
+  name: z.string().min(1, 'Nome é obrigatório'),
+  email: z.string().email('E-mail inválido').min(1, 'E-mail é obrigatório'),
+  password: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
+  confirmPassword: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "As senhas não coincidem",
+  path: ["confirmPassword"],
+});
+
+type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      // TODO: Implementar chamada à API
+      console.log('Register request:', data);
+      navigate('/');
+    } catch (error) {
+      console.error('Register failed:', error);
+    }
   };
 
   return (
@@ -50,21 +65,21 @@ export function RegisterPage() {
               </p>
             </div>
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                   Nome completo
                 </label>
                 <input
                   id="name"
-                  name="name"
                   type="text"
-                  required
+                  {...register('name')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Seu nome completo"
-                  value={formData.name}
-                  onChange={handleChange}
                 />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                )}
               </div>
 
               <div>
@@ -73,14 +88,14 @@ export function RegisterPage() {
                 </label>
                 <input
                   id="email"
-                  name="email"
                   type="email"
-                  required
+                  {...register('email')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="seu@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                )}
               </div>
 
               <div>
@@ -89,14 +104,14 @@ export function RegisterPage() {
                 </label>
                 <input
                   id="password"
-                  name="password"
                   type="password"
-                  required
+                  {...register('password')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Sua senha"
-                  value={formData.password}
-                  onChange={handleChange}
                 />
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                )}
               </div>
 
               <div>
@@ -105,21 +120,22 @@ export function RegisterPage() {
                 </label>
                 <input
                   id="confirmPassword"
-                  name="confirmPassword"
                   type="password"
-                  required
+                  {...register('confirmPassword')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Confirme sua senha"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
                 />
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-30"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-500 focus:ring-opacity-30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Cadastrar
+                {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
               </button>
             </form>
 
