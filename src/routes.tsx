@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
     element: <RecoverPasswordPage />,
   },
   {
-    path: '/cadastro',
+    path: '/register',
     element: <RegisterPage />,
   }
 ]); 
