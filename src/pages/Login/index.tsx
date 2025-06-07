@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Instagram, Github, Mail } from 'lucide-react';
 import roadImage from '../../assets/road.jpeg';
 import logo from '../../assets/logo.svg';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -26,11 +28,9 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Painel Esquerdo - Formulário de Login */}
       <div className="w-full lg:w-1/2 bg-white flex flex-col">
-        {/* Header */}
         <div className="p-8 pb-0 flex items-center justify-between">
-          <img src={logo} alt="Logo" className="h-10" />
+          <img src={logo} alt="Vai no Bus" className="h-12 w-auto" />
           <div className="flex items-center space-x-4">
             <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <Instagram className="w-5 h-5 text-gray-600" />
@@ -44,18 +44,16 @@ export function LoginPage() {
           </div>
         </div>
 
-        {/* Formulário de Login */}
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="w-full max-w-sm">
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">Login</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-2">Bem-vindo(a)!</h2>
               <p className="text-sm text-gray-600">
-                Bem-vindo(a)! Por favor, insira seus dados.
+                Por favor, insira seus dados.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Usuário */}
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
                   Usuário
@@ -72,7 +70,6 @@ export function LoginPage() {
                 />
               </div>
 
-              {/* Senha */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">
@@ -110,16 +107,16 @@ export function LoginPage() {
               <button
                 type="button"
                 className="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 flex items-center justify-center space-x-2"
+                onClick={() => navigate('/cadastro')}
               >
                 Criar conta
               </button>
             </form>
 
-            {/* Link para cadastro */}
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-600">
                 Esqueceu a Senha ?{' '}
-                <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                <button onClick={() => navigate('/recuperar-senha')} className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
                   Clique Aqui!
                 </button>
               </p>
@@ -128,7 +125,6 @@ export function LoginPage() {
         </div>
       </div>
 
-      {/* Painel Direito - Imagem de Fundo */}
       <div className="hidden lg:block lg:w-1/2 relative">
         <div 
           className="absolute inset-0 bg-cover bg-center"
