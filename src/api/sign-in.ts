@@ -13,7 +13,7 @@ export async function signIn({
   login,
   password,
 }: SignInRequest): Promise<SignInResponse> {
-  const response = await api.post('/user/signIn', {
+  const response = await api.post('/user/signin', {
     login,
     password,
   })
