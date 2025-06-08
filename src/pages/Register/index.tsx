@@ -5,10 +5,12 @@ import logo from '../../assets/logo.svg';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { register as registerUser } from '@/api/register'
 
 const registerSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
   email: z.string().email('E-mail inválido').min(1, 'E-mail é obrigatório'),
+  cpf: z.string().min(11, 'CPF é obrigatório').max(14, 'CPF inválido'),
   password: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
   confirmPassword: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -20,21 +22,34 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiSuccess, setApiSuccess] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const onSubmit = async (data: RegisterFormData) => {
+    setApiError(null);
+    setApiSuccess(null);
     try {
-      // TODO: Implementar chamada à API
-      console.log('Register request:', data);
-      navigate('/');
-    } catch (error) {
-      console.error('Register failed:', error);
+      await registerUser({
+        name: data.name,
+        email: data.email,
+        cpf: data.cpf,
+        password: data.password,
+      });
+      setApiSuccess('Cadastro realizado com sucesso! Redirecionando para o login...');
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+      reset();
+    } catch (error: any) {
+      setApiError(error?.response?.data?.message || 'Erro ao cadastrar. Tente novamente.');
     }
   };
 
@@ -99,6 +114,23 @@ export function RegisterPage() {
               </div>
 
               <div>
+                <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-1">
+                  CPF
+                </label>
+                <input
+                  id="cpf"
+                  type="text"
+                  {...register('cpf')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Seu CPF"
+                  maxLength={14}
+                />
+                {errors.cpf && (
+                  <p className="mt-1 text-sm text-red-600">{errors.cpf.message}</p>
+                )}
+              </div>
+
+              <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Senha
                 </label>
@@ -129,6 +161,13 @@ export function RegisterPage() {
                   <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
                 )}
               </div>
+
+              {apiError && (
+                <p className="mt-2 text-sm text-red-600 text-center">{apiError}</p>
+              )}
+              {apiSuccess && (
+                <p className="mt-2 text-sm text-green-600 text-center">{apiSuccess}</p>
+              )}
 
               <button
                 type="submit"
