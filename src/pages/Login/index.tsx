@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff, Instagram, Github, Mail } from 'lucide-react';
 import roadImage from '../../assets/road.jpeg';
 import logo from '../../assets/logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '@/api/sign-in';
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';    
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -29,12 +29,14 @@ export function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await signIn(data);
-      console.log('Login successful:', response);
-      navigate('/dashboard');
+      localStorage.setItem('token', response.data);
+      
+      navigate('/home');
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex">

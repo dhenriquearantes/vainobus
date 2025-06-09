@@ -5,7 +5,7 @@ import logo from '../../assets/logo.svg';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { register as registerUser } from '@/api/register'
+import { register as registerUser } from '@/api/register';
 
 const registerSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
@@ -37,21 +37,26 @@ export function RegisterPage() {
     setApiError(null);
     setApiSuccess(null);
     try {
-      await registerUser({
+      const response = await registerUser({
         name: data.name,
         email: data.email,
         cpf: data.cpf,
         password: data.password,
       });
-      setApiSuccess('Cadastro realizado com sucesso! Redirecionando para o login...');
+  
+      localStorage.setItem('token', response.token);
+  
+      setApiSuccess('Cadastro realizado com sucesso! Redirecionando...');
       setTimeout(() => {
-        navigate('/');
-      }, 2000);
+        navigate('/home');
+      }, 1500);
+  
       reset();
     } catch (error: any) {
       setApiError(error?.response?.data?.message || 'Erro ao cadastrar. Tente novamente.');
     }
   };
+  
 
   return (
     <div className="min-h-screen flex">
