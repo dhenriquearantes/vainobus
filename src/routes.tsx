@@ -1,8 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { LoginPage } from './pages/Login';
-import { DashboardPage } from './pages/Dashboard';
 import { RecoverPasswordPage } from './pages/RecoverPassword';
 import { RegisterPage } from './pages/Register';
+import { HomePage } from './pages/Home';
+import { PrivateRoute } from './lib/PrivateRoute';
 
 export const router = createBrowserRouter([
   {
@@ -10,8 +11,8 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: '/dashboard',
-    element: <DashboardPage />,
+    path: '/login',
+    element: <LoginPage />,
   },
   {
     path: '/recuperar-senha',
@@ -20,5 +21,15 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
-  }
+  },
+  {
+    path: '/home',
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: '/home',
+        element: <HomePage />,
+      },
+    ],
+  },
 ]); 
