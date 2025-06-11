@@ -53,7 +53,7 @@ export function RegisterPage() {
   
       reset();
     } catch (error: any) {
-      setApiError(error?.response?.data?.message || 'Erro ao cadastrar. Tente novamente.');
+      setApiError('Erro ao cadastrar. Tente novamente.');
     }
   };
   
