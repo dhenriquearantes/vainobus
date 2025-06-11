@@ -4,6 +4,7 @@ import { RecoverPasswordPage } from './pages/RecoverPassword';
 import { RegisterPage } from './pages/Register';
 import { HomePage } from './pages/Home';
 import { PrivateRoute } from './lib/PrivateRoute';
+import { CreateWorkspacePage } from './pages/CreateWorkspace';
 
 export const router = createBrowserRouter([
   {
@@ -31,5 +32,9 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
     ],
+  },
+  {
+    path: '/create-workspace',
+    element: <CreateWorkspacePage />,
   },
 ]); 
