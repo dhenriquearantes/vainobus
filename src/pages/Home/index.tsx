@@ -1,20 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/user';
+import { getWorkspaceByUser } from '@/api/workspace';
+import { useNavigate } from 'react-router-dom';
+import { Header } from '@/components/ui/header';
 
 export function HomePage() {
+  const navigate = useNavigate();
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: () => getUser(),
   });
 
+  const { data: workspace } = useQuery({
+    queryKey: ['workspace'],
+    queryFn: () => getWorkspaceByUser(),
+  });
+
+  // if (!workspace) {
+  //   navigate('/create-workspace');
+  // }
+
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-4 text-gray-600">
-          Bem-vindo ao seu painel de controle{user ? `, ${user.nome}` : ''}!
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-100">
+      <Header />
     </div>
   );
 } 
