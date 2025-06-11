@@ -18,5 +18,5 @@ export async function signIn({
     password,
   })
 
-  return response.data
+  return response.data;
 }

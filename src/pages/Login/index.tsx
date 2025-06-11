@@ -29,7 +29,7 @@ export function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await signIn(data);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.data);
       
       navigate('/home');
     } catch (error) {
