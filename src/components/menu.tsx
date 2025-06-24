@@ -1,69 +1,121 @@
-import { Home, Calendar, Share2, Bus, Users, UserPlus, BarChart2, FileText, Settings } from "lucide-react";
+import React, { useState } from 'react';
+import {
+  LayoutDashboard,
+  CalendarCheck,
+  Route,
+  Bus,
+  Users,
+  UserRound,
+  BarChart2,
+  ChevronDown,
+  ChevronRight,
+} from 'lucide-react';
 import logo from '@/assets/logo.svg';
-import logoMini from '@/assets/logo.svg';
 
-export function Menu({ open }: { open: boolean }) {
-  return (
-    <aside className={`fixed top-0 left-0 h-full ${open ? 'w-64' : 'w-16'} bg-white border-r shadow-sm flex flex-col transition-all duration-200 z-30`}>
-      <div className={`flex items-center ${open ? 'gap-2 px-6' : 'justify-center px-2'} py-4 border-b relative`}>
-        <img
-          src={open ? logo : logoMini}
-          alt="Logo"
-          className={`transition-all object-contain ${open ? 'w-28 h-12' : 'w-10 h-10'}`}
-        />
-        {open && (
-          <div>
-            {/* Espaço reservado para nome do sistema, se quiser adicionar */}
-          </div>
-        )}
-      </div>
-      <nav className="flex-1 overflow-y-auto px-2 py-2">
-        <div className="mb-4">
-          {open && <div className="text-xs text-gray-400 font-semibold mb-2 px-2">Menu Principal</div>}
-          <MenuItem icon={<Home className="w-5 h-5" />} label="Dashboard" open={open} />
-          <MenuItem icon={<Calendar className="w-5 h-5" />} label="Confirmações" open={open} />
-          <MenuItem icon={<Share2 className="w-5 h-5" />} label="Rotas do Dia" open={open} />
-        </div>
-        <div className="mb-4">
-          {open && <div className="text-xs text-gray-400 font-semibold mb-2 px-2">Cadastros</div>}
-          <MenuItem icon={<Bus className="w-5 h-5" />} label="Frota de Veículos" subItems={open ? ["Listar Veículos", "Novo Veículo"] : undefined} open={open} />
-          <MenuItem icon={<Users className="w-5 h-5" />} label="Motoristas" subItems={open ? ["Listar Motoristas", "Novo Motorista"] : undefined} open={open} />
-          <MenuItem icon={<UserPlus className="w-5 h-5" />} label="Alunos" subItems={open ? ["Listar Alunos", "Novo Aluno"] : undefined} open={open} />
-        </div>
-        <div className="mb-4">
-          {open && <div className="text-xs text-gray-400 font-semibold mb-2 px-2">Relatórios</div>}
-          <MenuItem icon={<BarChart2 className="w-5 h-5" />} label="Relatórios" open={open} />
-          <MenuItem icon={<FileText className="w-5 h-5" />} label="Histórico de Rotas" open={open} />
-        </div>
-        <div>
-          <MenuItem icon={<Settings className="w-5 h-5" />} label="Configurações" open={open} />
-        </div>
-      </nav>
-    </aside>
-  );
+interface MenuProps {
+  collapsed?: boolean;
 }
 
-function MenuItem({ icon, label, subItems, open }: { icon: React.ReactNode; label: string; subItems?: string[]; open: boolean }) {
-  return (
-    <div className="mb-1">
-      <div className={`flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 cursor-pointer text-gray-700 ${!open ? 'justify-center' : ''}`}>
-        {icon}
-        {open && <span className="text-sm font-medium">{label}</span>}
-      </div>
-      {open && subItems && (
-        <div className="ml-8 mt-1 flex flex-col gap-1">
-          {subItems.map((sub: string, idx: number) => (
-            <span key={idx} className="text-xs text-gray-500 hover:text-gray-700 cursor-pointer py-0.5">{sub}</span>
-          ))}
-        </div>
-      )}
+export function Menu({ collapsed }: MenuProps) {
+  const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+    <span className="text-xs font-semibold text-gray-400 px-4 mt-4 mb-1 select-none whitespace-nowrap block">
+      {children}
+    </span>
+  );
+
+  const SubItem = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex items-center">
+      <div className="h-6 border-l border-gray-200 ml-5 mr-2" />
+      <span className="text-gray-500 text-xs font-normal whitespace-nowrap">{children}</span>
     </div>
   );
-}
 
-function ShieldIcon(props: React.SVGProps<SVGSVGElement>) {
-  // Ícone simples de escudo (pode ser substituído por outro do Lucide se preferir)
+  const [openFrota, setOpenFrota] = useState(false);
+  const [openMotoristas, setOpenMotoristas] = useState(false);
+  const [openAlunos, setOpenAlunos] = useState(false);
+
   return (
-    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l7 4v5c0 5.25-3.5 9.74-7 11-3.5-1.26-7-5.75-7-11V7l7-4z" /></svg>
+    <aside className="fixed top-0 left-0 h-full w-56 bg-white shadow-lg z-30 transition-all duration-700 flex flex-col">
+      <div className="flex border-b px-4 transition-all duration-700 h-16 items-center justify-start">
+        <img
+          src={logo}
+          alt="Vai no Bus"
+          className="h-12 w-auto hover:cursor-pointer transition-all duration-700"
+        />
+      </div>
+      <nav className="flex-1 flex flex-col gap-1 p-2">
+        <SectionTitle>Menu Principal</SectionTitle>
+        <a href="#" className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group">
+          <LayoutDashboard size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1">Dashboard</span>
+        </a>
+        <a href="#" className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group">
+          <CalendarCheck size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1">Confirmações</span>
+        </a>
+        <a href="#" className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group">
+          <Route size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1">Rotas do Dia</span>
+        </a>
+
+        {/* Cadastros */}
+        <SectionTitle>Cadastros</SectionTitle>
+        {/* Frota de Veículos */}
+        <button
+          type="button"
+          className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group w-full text-left"
+          onClick={() => setOpenFrota((prev) => !prev)}
+        >
+          <Bus size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1 flex-1">Frota de Veículos</span>
+          {openFrota ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+        </button>
+        {openFrota && (
+          <div className="ml-2 flex flex-col gap-1">
+            <SubItem>Listar Veículos</SubItem>
+            <SubItem>Novo Veículo</SubItem>
+          </div>
+        )}
+        {/* Motoristas */}
+        <button
+          type="button"
+          className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group w-full text-left"
+          onClick={() => setOpenMotoristas((prev) => !prev)}
+        >
+          <Users size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1 flex-1">Motoristas</span>
+          {openMotoristas ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+        </button>
+        {openMotoristas && (
+          <div className="ml-2 flex flex-col gap-1">
+            <SubItem>Listar Motoristas</SubItem>
+            <SubItem>Novo Motorista</SubItem>
+          </div>
+        )}
+        {/* Alunos */}
+        <button
+          type="button"
+          className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group w-full text-left"
+          onClick={() => setOpenAlunos((prev) => !prev)}
+        >
+          <UserRound size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1 flex-1">Alunos</span>
+          {openAlunos ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+        </button>
+        {openAlunos && (
+          <div className="ml-2 flex flex-col gap-1">
+            <SubItem>Listar Alunos</SubItem>
+            <SubItem>Novo Aluno</SubItem>
+          </div>
+        )}
+
+        {/* Relatórios */}
+        <SectionTitle>Relatórios</SectionTitle>
+        <a href="#" className="flex items-center gap-3 py-2 px-4 rounded hover:bg-gray-100 transition-colors group">
+          <BarChart2 size={16} className="text-gray-600" />
+          <span className="text-gray-800 font-medium text-sm transition-all duration-700 overflow-hidden whitespace-nowrap block ml-1">Relatórios</span>
+        </a>
+      </nav>
+    </aside>
   );
 }

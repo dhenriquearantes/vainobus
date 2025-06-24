@@ -6,7 +6,7 @@ export interface Workspace {
 }
 
 
-export async function getWorkspaceByUser(): Promise<Workspace | null> {
+export async function getWorkspace(): Promise<Workspace | null> {
   try {
     const response = await api.get('/workspace/me');
     return response.data;

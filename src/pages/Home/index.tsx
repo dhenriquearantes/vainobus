@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/user';
-import { getWorkspaceByUser } from '@/api/workspace';
+import { getWorkspace } from '@/api/workspace';
 import { useNavigate } from 'react-router-dom';
-import { Header } from '@/components/ui/header';
+import { DashboardLayout } from '@/components/ui/dashboard-layout';
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -13,16 +13,14 @@ export function HomePage() {
 
   const { data: workspace } = useQuery({
     queryKey: ['workspace'],
-    queryFn: () => getWorkspaceByUser(),
+    queryFn: () => getWorkspace(),
   });
 
-  // if (!workspace) {
-  //   navigate('/create-workspace');
-  // }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-    </div>
+    <DashboardLayout>
+      <div className="min-h-screen bg-gray-100">
+      </div>
+    </DashboardLayout>
   );
 } 
