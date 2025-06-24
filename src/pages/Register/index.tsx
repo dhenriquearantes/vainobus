@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ArrowLeft, Instagram, Github, Mail } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
@@ -18,42 +17,31 @@ const registerSchema = z.object({
   path: ["confirmPassword"],
 });
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterSchema = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const [apiError, setApiError] = useState<string | null>(null);
-  const [apiSuccess, setApiSuccess] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
-  } = useForm<RegisterFormData>({
+  } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
-    setApiError(null);
-    setApiSuccess(null);
+  const onSubmit = async ({ name, email, cpf, password }: RegisterSchema) => {
     try {
-      const response = await registerUser({
-        name: data.name,
-        email: data.email,
-        cpf: data.cpf,
-        password: data.password,
+      await registerUser({
+        name,
+        email,
+        cpf,
+        password,
       });
   
-      localStorage.setItem('token', response.token);
-  
-      setApiSuccess('Cadastro realizado com sucesso! Redirecionando...');
-      setTimeout(() => {
-        navigate('/home');
-      }, 1500);
-  
-      reset();
-    } catch (error: any) {
-      setApiError('Erro ao cadastrar. Tente novamente.');
+      navigate('/');
+    } catch (error) {
+      console.error('Register failed:', error);
     }
   };
   
@@ -166,14 +154,6 @@ export function RegisterPage() {
                   <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
                 )}
               </div>
-
-              {apiError && (
-                <p className="mt-2 text-sm text-red-600 text-center">{apiError}</p>
-              )}
-              {apiSuccess && (
-                <p className="mt-2 text-sm text-green-600 text-center">{apiSuccess}</p>
-              )}
-
               <button
                 type="submit"
                 disabled={isSubmitting}

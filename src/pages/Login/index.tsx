@@ -9,34 +9,34 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const loginSchema = z.object({
-  login: z.string().min(1, 'CPF ou E-mail é obrigatório'),
-  password: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
+  login: z.string(),
+  password: z.string(),
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginSchema = z.infer<typeof loginSchema>;
 
 export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
+  } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async ({ login, password }: LoginSchema) => {
     try {
-      const response = await signIn(data);
+      const response = await signIn({ login, password });
       localStorage.setItem('token', response.data);
-      
+
       navigate('/home');
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
-  
 
   return (
     <div className="min-h-screen flex">

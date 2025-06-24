@@ -6,7 +6,7 @@ export interface SignInRequest {
 }
 
 export interface SignInResponse {
-  token: string
+  data: string
 }
 
 export async function signIn({

@@ -8,14 +8,7 @@ export interface RegisterRequest {
 }
 
 export interface RegisterResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    cpf: string;
-    tipo_usuario: number;
-  };
-  token: string;
+  data: string;
 }
 
 export async function register({
