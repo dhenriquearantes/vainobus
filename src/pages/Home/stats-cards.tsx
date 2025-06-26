@@ -32,7 +32,7 @@ export function StatsCards() {
       />
       <StatCard
         title="Media de Frequência"
-        value={85.5}
+        value="85%"
         icon={<span className="text-lg text-green-600">👥</span>}
       />
       <StatCard
