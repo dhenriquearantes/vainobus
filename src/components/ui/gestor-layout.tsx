@@ -19,7 +19,7 @@ export function GestorLayout({ children }: GestorLayoutProps) {
       <div
         className={`transition-all duration-300 ${menuCollapsed ? 'ml-0' : 'ml-56'}`}
       >
-        <Header collapsed={menuCollapsed} onToggleCollapse={() => setMenuCollapsed((prev) => !prev)} />
+        <Header collapsed={menuCollapsed} onToggleCollapse={() => setMenuCollapsed((prev) => !prev)} menuVisible={true} />
         <main className="p-6">{children}</main>
       </div>
     </div>
