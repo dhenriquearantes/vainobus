@@ -6,6 +6,7 @@ import { DashboardLayout } from '@/components/ui/dashboard-layout';
 import { StatsCards } from './stats-cards';
 import { ChartAlunosViagem } from './chart-viagens';
 import { ActionCards } from './action-cards';
+import { ActivitiesArea } from './activities-area';
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -29,7 +30,14 @@ export function HomePage() {
         <div className="w-full">
           <ChartAlunosViagem />
         </div>
-        <ActionCards />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="col-span-2">
+            <ActivitiesArea />
+          </div>
+          <div className="col-span-1">
+            {/* <ActionCards /> */}
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );
