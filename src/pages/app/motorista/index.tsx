@@ -206,11 +206,6 @@ export function MotoristaPage() {
             </Button>
           </CardContent>
         </Card>
-
-        {/* Saudação */}
-        <div className="mt-2 text-sm text-gray-500 text-center">
-          Olá, <span className="font-semibold text-gray-900">{user?.nome}</span> 👋🏼
-        </div>
       </div>
     </MotoristaLayout>
   );
