@@ -5,6 +5,7 @@ import { LogOut, User } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 export function AccountMenu() {
   const navigate = useNavigate()
@@ -94,14 +95,18 @@ export function AccountMenu() {
               <User className="mr-2 h-4 w-4 text-gray-500" />
               <span>Perfil</span>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="flex items-center justify-between px-4 py-2 cursor-pointer text-red-600 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-              onClick={handleLogout}
-            >
-              <span className="flex items-center gap-2">
-                <LogOut className="h-4 w-4 text-red-500" />
-                Sair
-              </span>
+            <DropdownMenuItem asChild>
+              <Button
+                type="button"
+                variant="destructive"
+                className="flex items-center justify-between w-full"
+                onClick={handleLogout}
+              >
+                <span className="flex items-center gap-2">
+                  <LogOut className="h-4 w-4 text-red-500" />
+                  Sair
+                </span>
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
