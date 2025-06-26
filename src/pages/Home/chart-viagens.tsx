@@ -33,7 +33,7 @@ export function ChartAlunosViagem() {
   return (
     <Card className="w-full bg-white">
       <CardHeader>
-        <CardTitle>Alunos viajando por dia (últimos 30 dias)</CardTitle>
+        <CardTitle>Frequência Semanal</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full" style={{ height: 350 }}>

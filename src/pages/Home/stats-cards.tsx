@@ -26,13 +26,13 @@ export function StatsCards() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       <StatCard
-        title="Veículos Ativos"
-        value={12}
+        title="Total de Alunos"
+        value={245}
         icon={<span className="text-lg text-blue-600">🚍</span>}
       />
       <StatCard
-        title="Motoristas"
-        value={8}
+        title="Media de Frequência"
+        value={85.5}
         icon={<span className="text-lg text-green-600">👥</span>}
       />
       <StatCard
