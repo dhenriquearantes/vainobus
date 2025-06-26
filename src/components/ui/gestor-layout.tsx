@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Menu } from '../menu';
 import { Header } from './header';
 
-interface DashboardLayoutProps {
+interface GestorLayoutProps {
   children: React.ReactNode;
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function GestorLayout({ children }: GestorLayoutProps) {
   const [menuCollapsed, setMenuCollapsed] = useState(false);
 
   return (
